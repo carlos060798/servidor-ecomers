@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './products/products.module';
+import { CoommeModule } from './coomme/coomme.module';
 
 
 @Module({
@@ -18,7 +19,7 @@ import { ProductsModule } from './products/products.module';
     password: process.env.DB_PASSWORD,
     autoLoadEntities: true, // models will be loaded automatically (you don't have to explicitly define the entities: [] array)
     synchronize: true,  //  synchronize the database with the entities every time the application starts
-   }), ProductsModule
+   }), ProductsModule, CoommeModule
   ],
   controllers: [AppController],
   providers: [AppService],
