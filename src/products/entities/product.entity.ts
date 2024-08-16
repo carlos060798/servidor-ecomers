@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn,BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn,BeforeInsert, BeforeUpdate, OneToMany } from 'typeorm';
+import { ProductImage } from './product.image.entity';
 
-@Entity()
+@Entity({name: 'products'})
 export class Product {
 
     @PrimaryGeneratedColumn('uuid')
@@ -44,7 +45,17 @@ export class Product {
         array: true,
         default: []
     })
-    tags: string[];
+    tags: string[]; 
+
+    // images: ProductImage[];
+    @OneToMany(  //  relacion de la tabla priducots  con la tabla  productImage👈
+        () => ProductImage,
+        (productImage) => productImage.product,
+        {
+            cascade: true, eager:true 
+        }
+    )
+     images?: ProductImage[]
 
     // procedimiento para crear un slug automatico
      @BeforeInsert()
