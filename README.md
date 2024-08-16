@@ -13,4 +13,14 @@ backend de e-comerce con nodejs y  nest  postgresql  tyorm Database
    npm run start 
 
 # lerr el archivo env.template para ver las variables de entorno
-   npm run read
+   npm run read  
+
+# se ejecuta  el enpoint de data de prueba
+
+   http://localhost:3000/api/seed 
+
+
+# se ejecuta multer para subir archivos
+$ npm i -D @types/multer
+
+   http://localhost:3000/api/upload
