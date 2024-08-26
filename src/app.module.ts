@@ -9,6 +9,7 @@ import { SeedNoSpecModule } from './seed--no-spec/seed--no-spec.module';
 import { FilesModule } from './files/files.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -23,14 +24,16 @@ import { join } from 'path';
     password: process.env.DB_PASSWORD,
     autoLoadEntities: true, // models will be loaded automatically (you don't have to explicitly define the entities: [] array)
     synchronize: true,  //  synchronize the database with the entities every time the application starts
-   }), 
+   
+  
+  }), 
    
    // configuracion de la carpeta publica  para servir  datos estaticos publicos
    ServeStaticModule.forRoot({
     rootPath: join(__dirname, '..', 'public' ),
     })
    
-   ,ProductsModule, CoommeModule, SeedNoSpecModule, FilesModule ,
+   ,ProductsModule, CoommeModule, SeedNoSpecModule, FilesModule, AuthModule ,
 
   
   ],
