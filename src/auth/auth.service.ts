@@ -39,7 +39,7 @@ export class AuthService {
   
     return  {
       ...user,
-      token : this.getJwtToken({email: user.email})
+      token : this.getJwtToken({id: user.id})
     }
    }catch(error){
      this.handleError(error)
@@ -53,7 +53,7 @@ export class AuthService {
     try{ 
       const user = await this.userRepository.findOne({
         where : {email},
-        select : ['email', 'password']
+        select : ['email', 'password',"id"]
       })  // findOneBy es un metodo que no existe en typeorm
       if(!user){
         throw new UnauthorizedException('invalid credentials')
@@ -64,7 +64,7 @@ export class AuthService {
       }
       return {
         ...user,
-        token : this.getJwtToken({email: user.email}) 
+        token : this.getJwtToken({id: user.id}) 
       }
 
 
