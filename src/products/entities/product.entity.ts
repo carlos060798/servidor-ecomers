@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn,BeforeInsert, BeforeUpdate, OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn,BeforeInsert, BeforeUpdate, OneToMany, ManyToOne } from 'typeorm';
 import { ProductImage } from './product.image.entity';
+import { User } from 'src/auth/entities/auth.entity';
 
 @Entity({name: 'products'})
 export class Product {
@@ -56,6 +57,16 @@ export class Product {
         }
     )
      images?: ProductImage[]
+   
+    // relacion de la tabla products con la tabla user
+     @ManyToOne(
+        ()=>  User,
+        (user) => user.product,
+        {
+            eager: true   // esto es para que traiga los datos de la tabla relacionada
+        }
+     )
+     user: User;
 
     // procedimiento para crear un slug automatico
      @BeforeInsert()

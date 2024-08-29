@@ -1,21 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,Query, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseUUIDPipe } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { paginationDto } from 'src/coomme/dto/pagination-dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { ValidRole } from 'src/auth/interface/valid-role';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { User } from 'src/auth/entities/auth.entity';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @Post()
-   async create(@Body() createProductDto: CreateProductDto) {
+  @Auth() //  decorador para validar que el usuario tenga el rol de adming
+  async create(@Body() createProductDto: CreateProductDto,
+    @GetUser() user: User
+  ) {
 
-    return this.productsService.create(createProductDto);
+    return this.productsService.create(createProductDto,user);
   }
 
   @Get()
-  findAll(@Query() pagination:paginationDto) {
+  findAll(@Query() pagination: paginationDto) {
     return this.productsService.findAll(pagination);
   }
 
@@ -26,12 +33,16 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  update(@Param('id',ParseUUIDPipe) id:string , @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(id, updateProductDto);
+  @Auth(ValidRole.admin)
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateProductDto: UpdateProductDto ,
+  @GetUser() user: User
+) {
+    return this.productsService.update(id, updateProductDto,user);
   }
 
   @Delete(':id')
-  remove(@Param('id',ParseUUIDPipe) id: string) {
+  @Auth(ValidRole.admin)
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.productsService.remove(id);
   }
 }

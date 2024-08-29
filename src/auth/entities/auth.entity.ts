@@ -1,5 +1,7 @@
-import { BeforeInsert, BeforeUpdate, Column } from "typeorm";
+import { Product } from "src/products/entities/product.entity";
+import { BeforeInsert, BeforeUpdate, Column, OneToMany} from "typeorm";
 import { Entity, PrimaryGeneratedColumn } from "typeorm";
+
 
 @Entity()
 export class User{
@@ -24,7 +26,15 @@ export class User{
         array : true,
          default : ['user']
     })
-    role : string[];
+    role : string[]; 
+
+    // relacion de la tabla user con la tabla product
+    @OneToMany(
+        ()=> Product,
+        (product) => product.user,
+       
+    )
+    product: Product;
 
     @BeforeInsert()
     cherckFieldsBeforeInsert(){

@@ -7,7 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { paginationDto } from 'src/coomme/dto/pagination-dto';
 import { validate as IsUuid } from 'uuid'
 import { ProductImage } from './entities/product.image.entity';
-import { DataSource } from 'typeorm';
+import { DataSource } from 'typeorm'; 
+import { User } from 'src/auth/entities/auth.entity';
 @Injectable()
 export class ProductsService {
 
@@ -26,13 +27,14 @@ export class ProductsService {
 
     private readonly  dataSource: DataSource  //  esta  propiedad  es para  hacer  querys  directas  a la base de datos
   ) { }
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto,user: User) {
     const { images = [], ...productDetails } = createProductDto;
 
     try {
       const product = this.productRepository.create({
         ...productDetails,
-        images: images.map(image => this.imageProductRepository.create({ url: image }))  // esto es para crear un array de imagenes en la base de datos
+        images: images.map(image => this.imageProductRepository.create({ url: image })), // esto es para crear un array de imagenes en la base de datos
+        user: user
       });
       await this.productRepository.save(product);
       return product;
@@ -104,7 +106,7 @@ export class ProductsService {
       images: images.map(image=> image.url)
     }
   }
-  async update(id: string, updateProductDto: UpdateProductDto) {
+  async update(id: string, updateProductDto: UpdateProductDto,user: User) {
 
      const { images , ...productupdate } = updateProductDto;
      const product = await this.productRepository.preload({
@@ -129,7 +131,7 @@ export class ProductsService {
       } else{
         product.images =  await  this.imageProductRepository.findBy({product: {id}}); //  se  traen  las imagenes  del producto
       }
-     
+      product.user = user; 
       await queryRunner.manager.save(product); // se  guardan  los cambios
       await queryRunner.commitTransaction(); // se  confirma  la transaccion
       await queryRunner.release(); // se  libera  la transaccion
