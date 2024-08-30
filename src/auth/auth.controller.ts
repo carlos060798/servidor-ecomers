@@ -29,8 +29,17 @@ export class AuthController {
   login(@Body() loginUserDto: LoginUserDto){
     return this.authService.login(loginUserDto)
   }
+
+  @Get('check-auth-status') // ruta para verificar si el usuario esta autenticado
+  @Auth()
+  checkAuthStatus(
+    @GetUser() user: User ,
+
+  ){
+   return this.authService.checkAuthStatus(user)
+  }
   
-@Get('private') 
+@Get('private')  // ruta privada
 @UseGuards(AuthGuard()) // protegemos la ruta con el guard
 testingPrivateRoute(
   @GetUser() user: User ,
