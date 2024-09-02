@@ -11,7 +11,9 @@ import { UserRoleGuard } from './guards/user-role/user-role.guard';
 import { ValidRole } from './interface/valid-role';
 import { RoleProtected } from './decorators/role-protected.decorator';
 import { Auth } from './decorators/auth.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

@@ -7,7 +7,20 @@ import { Auth } from 'src/auth/decorators/auth.decorator';
 import { ValidRole } from 'src/auth/interface/valid-role';
 import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/entities/auth.entity';
-
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Product } from './entities/product.entity';
+@ApiTags('products')
+@ApiResponse({ status: 201, description: 'Producto creado', 
+  type: Product
+})
+@ApiResponse({ status: 400, description: 'Bad Request' 
+})
+@ApiResponse({ status: 401, description: 'No autorizado' 
+})
+@ApiResponse({ status: 403, description: 'Token invalido' 
+})
+@ApiResponse({ status: 404, description: 'No encontrado' 
+})
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }

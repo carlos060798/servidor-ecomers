@@ -7,11 +7,13 @@ import { diskStorage } from 'multer';
 import { fileName } from './helpers/fileName';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 
 
 
-
+@ApiTags('files')
+@ApiResponse({status: 400, description: 'Bad Request'})
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService ,
